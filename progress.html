@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>LoFiWeb Tutorial — progress</title>
+  <meta name="description" content="Your LoFiWeb Tutorial progress report: lesson status, effort statistics and teacher notes." />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body class="report-page">
+  <header class="toolbar">
+    <a class="brand mini" href="index.html" title="Back to the landing page">
+      <span class="brand-kicker">Vormamim</span>
+      <strong>LoFiWeb Tutorial</strong>
+    </a>
+    <span class="spacer"></span>
+    <a class="button button-secondary" href="ide.html">Back to the IDE</a>
+    <a class="button button-secondary" href="exam.html">The examination</a>
+    <button class="button button-primary" id="downloadBtn">Download report</button>
+  </header>
+
+  <main class="report-main">
+    <p class="page-eyebrow">Progress report</p>
+    <h1>Your journey so far</h1>
+    <p class="report-summary" id="summaryLine"></p>
+    <div id="examBanner" class="exam-banner" hidden></div>
+
+    <div id="courses"></div>
+
+    <section class="report-danger">
+      <h2>Start over</h2>
+      <p>This erases every lesson record on this computer. There is no undo.</p>
+      <button class="button button-secondary" id="resetBtn">Reset all progress</button>
+    </section>
+
+    <p class="report-note">A note on the statistics: "typed" counts characters you typed;
+    "pasted" counts characters that arrived via paste. Notes appear when a lesson was
+    completed mostly by pasting, when the final code closely matches the example, or when
+    it uses techniques the course never taught. They are conversation starters for you and
+    your teacher, not accusations.</p>
+  </main>
+
+  <script src="js/common.js"></script>
+  <script src="js/lessons.js"></script>
+  <script src="js/progress.js"></script>
+  <script>
+  (function () {
+    "use strict";
+    var $ = function (id) { return document.getElementById(id); };
+
+    function render() {
+      var s = window.TUT.summary();
+      $("summaryLine").textContent = s.complete + " of " + s.total +
+        " lessons complete" + (s.flagged ? " · " + s.flagged + " with notes for your teacher" : "");
+
+      var banner = $("examBanner");
+      if (s.complete === s.total && s.total > 0) {
+        banner.hidden = false;
+        banner.innerHTML = "<strong>You are ready for the examination.</strong> " +
+          "Fifty minutes, eight questions, everything you have practised. " +
+          "<a href='exam.html'>Begin when your teacher says so.</a>";
+      } else {
+        banner.hidden = false;
+        banner.innerHTML = "The examination unlocks its best marks for finished students: " +
+          "complete all " + s.total + " lessons first. <a href='exam.html'>Preview the exam page</a> any time.";
+      }
+
+      var box = $("courses");
+      box.innerHTML = "";
+      var p = window.TUT.load();
+      s.courses.forEach(function (course) {
+        var sec = document.createElement("section");
+        sec.className = "report-course";
+        var doneCount = course.lessons.filter(function (r) {
+          return r.rec && r.rec.status === "complete";
+        }).length;
+        var h = document.createElement("h2");
+        h.textContent = course.title + " — " + doneCount + " / " + course.lessons.length;
+        sec.appendChild(h);
+
+        var table = document.createElement("table");
+        table.className = "report-table";
+        table.innerHTML = "<thead><tr><th>Lesson</th><th>Status</th><th>Time</th>" +
+          "<th>Typed</th><th>Runs</th><th>Notes</th></tr></thead>";
+        var tbody = document.createElement("tbody");
+        course.lessons.forEach(function (row) {
+          var r = row.rec;
+          var tr = document.createElement("tr");
+          function td(text, cls) {
+            var cell = document.createElement("td");
+            cell.textContent = text;
+            if (cls) cell.className = cls;
+            tr.appendChild(cell);
+          }
+          td(row.lesson.title);
+          if (!r) {
+            td("not started", "muted"); td("-"); td("-"); td("-"); td("");
+          } else {
+            td(r.status === "complete" ? "complete" : "in progress",
+               r.status === "complete" ? "status-done" : "status-started");
+            td(Math.round((r.seconds || 0) / 60) + " min");
+            var total = (r.typed || 0) + (r.pasted || 0);
+            td(total ? Math.round(100 * (r.typed || 0) / total) + "%" : "-");
+            td(String(r.runs || 0));
+            var notes = (r.flags || []).map(function (f) {
+              return window.TUT.FLAG_TEXT[f] || f;
+            });
+            if (r.advanced && r.advanced.length) {
+              notes.push("Untaught techniques seen: " + r.advanced.join(", "));
+            }
+            td(notes.join("; "), notes.length ? "flagged" : "");
+          }
+          tbody.appendChild(tr);
+        });
+        table.appendChild(tbody);
+        sec.appendChild(table);
+        box.appendChild(sec);
+      });
+    }
+
+    $("downloadBtn").addEventListener("click", function () {
+      var blob = new Blob([window.TUT.reportText()], { type: "text/plain" });
+      var url = URL.createObjectURL(blob);
+      var a = document.createElement("a");
+      a.href = url; a.download = "lofiweb-tutorial-progress.txt";
+      document.body.appendChild(a); a.click(); a.remove();
+      setTimeout(function () { URL.revokeObjectURL(url); }, 1000);
+    });
+
+    $("resetBtn").addEventListener("click", function () {
+      if (confirm("Erase all lesson progress on this computer? This cannot be undone.")) {
+        localStorage.removeItem("tut:progress");
+        localStorage.removeItem("tut:exam");
+        render();
+      }
+    });
+
+    render();
+  })();
+  </script>
+</body>
+</html>

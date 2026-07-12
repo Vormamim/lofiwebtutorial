@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>LoFiWeb Tutorial — the IDE</title>
+  <meta name="description" content="The LoFiWeb Tutorial IDE: forty self-paced lessons beside three editors and a live VormWeb preview." />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body class="lofi">
+  <!-- ------------------------------------------------------- toolbar --- -->
+  <header class="toolbar">
+    <a class="brand mini" href="index.html" id="brandHome" title="Back to the landing page">
+      <span class="brand-kicker">Vormamim</span>
+      <strong>LoFiWeb Tutorial</strong>
+    </a>
+    <span class="spacer"></span>
+    <a class="button button-secondary" href="progress.html" title="See your progress report">Progress</a>
+    <button class="button button-secondary" id="loadBtn" title="Open a saved .html page">Load</button>
+    <button class="button button-secondary" id="saveBtn" title="Download as a single .html file">Save</button>
+    <button class="button button-secondary" id="copyBtn" title="Copy the whole page as one HTML file">Copy</button>
+    <button class="button button-secondary" id="placeholderBtn" title="Insert a placeholder image">Import placeholder</button>
+    <button class="button button-primary" id="runBtn" title="Refresh the preview (Ctrl+Enter)">Run</button>
+    <input type="file" id="fileInput" accept=".html,text/html" hidden />
+  </header>
+
+  <!-- ---------------------------------------------------- workspace --- -->
+  <main class="workspace" id="workspace">
+    <!-- COLUMN 1: three editor rows -->
+    <section class="editors" id="editors">
+      <div class="editor-row" data-lang="html">
+        <div class="editor-head"><span class="dot pink"></span><span class="label">HTML</span>
+          <span class="spacer"></span><span class="hint">the page content</span></div>
+        <div class="editor-wrap">
+          <div class="gutter" id="gutter-html" aria-hidden="true"></div>
+          <textarea id="ed-html" class="code-input" spellcheck="false" autocomplete="off" autocapitalize="off" wrap="soft"></textarea>
+        </div>
+      </div>
+
+      <div class="row-divider" title="Drag to resize · double-click to reset"></div>
+
+      <div class="editor-row" data-lang="js">
+        <div class="editor-head"><span class="dot cyan"></span><span class="label">JS</span>
+          <span class="spacer"></span><span class="hint">make it interactive</span></div>
+        <div class="editor-wrap">
+          <div class="gutter" id="gutter-js" aria-hidden="true"></div>
+          <textarea id="ed-js" class="code-input" spellcheck="false" autocomplete="off" autocapitalize="off" wrap="soft"></textarea>
+        </div>
+      </div>
+
+      <div class="row-divider" title="Drag to resize · double-click to reset"></div>
+
+      <div class="editor-row" data-lang="css">
+        <div class="editor-head"><span class="dot violet"></span><span class="label">CSS</span>
+          <span class="spacer"></span><span class="hint">style &amp; layout</span></div>
+        <div class="editor-wrap">
+          <div class="gutter" id="gutter-css" aria-hidden="true"></div>
+          <textarea id="ed-css" class="code-input" spellcheck="false" autocomplete="off" autocapitalize="off" wrap="soft"></textarea>
+        </div>
+      </div>
+    </section>
+
+    <!-- draggable divider -->
+    <div class="divider" id="divider" title="Drag to resize · double-click to reset"></div>
+
+    <!-- COLUMN 2: the fake "VormWeb" browser -->
+    <section class="vormweb">
+      <div class="vw-chrome">
+        <span class="vw-dot red"></span><span class="vw-dot amber"></span><span class="vw-dot green"></span>
+        <div class="vw-address"><span id="vwUrl">vormweb://lesson</span></div>
+        <button class="vw-reload" id="reloadBtn" title="Reload preview">Reload</button>
+      </div>
+      <iframe id="preview" class="vw-screen" sandbox="allow-scripts allow-modals" title="VormWeb live preview"></iframe>
+      <div class="vw-console">
+        <div class="vw-console-head">
+          <span class="label">Console</span>
+          <span class="spacer"></span>
+          <button id="consoleClear" title="Clear the console">Clear</button>
+        </div>
+        <div class="vw-console-body" id="consoleBody" aria-live="polite"></div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ------------------------------------------- lessons slide-out --- -->
+  <button class="rail-toggle" id="railToggle">Lessons</button>
+  <aside class="rail" id="rail" aria-label="Lessons">
+    <button class="rail-close" id="railClose" title="Close">Close</button>
+    <p class="page-eyebrow">Course outline</p>
+    <p class="nav-progress" id="railProgress"></p>
+    <nav id="lessonNav" aria-label="Lessons"></nav>
+  </aside>
+
+  <!-- ------------------------------------------------ tutor modal --- -->
+  <div class="modal-backdrop" id="lessonModal" hidden>
+    <div class="modal lesson-modal">
+      <div class="modal-head">
+        <h2 id="lmTitle">Lesson</h2>
+        <button class="rail-close" id="lmClose" title="Close">Close</button>
+      </div>
+      <p class="lm-goal" id="lmGoal"></p>
+      <div class="lm-page" id="lmPage"></div>
+      <div class="lm-checks" id="lmChecks" hidden>
+        <h3>Your task checklist</h3>
+        <ul id="lmCheckList"></ul>
+        <p class="lm-note" id="lmNote" hidden></p>
+      </div>
+      <div class="lm-footer">
+        <div class="lm-actions">
+          <button class="button button-secondary" id="lmLoad" hidden>Load example</button>
+          <button class="button button-primary" id="lmCheckBtn" hidden>Check my work</button>
+        </div>
+        <div class="lm-nav">
+          <button class="button button-secondary" id="lmBack">Back</button>
+          <span class="lm-count" id="lmCount"></span>
+          <button class="button button-primary" id="lmNext">Next</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ------------------------------------------- placeholder modal --- -->
+  <div class="modal-backdrop" id="phModal" hidden>
+    <div class="modal">
+      <div class="modal-head">
+        <h2>Import a placeholder</h2>
+        <button class="rail-close" id="phClose" title="Close">Close</button>
+      </div>
+      <p class="modal-sub">For practice pages. Click one to drop an <code>&lt;img&gt;</code> into your HTML.</p>
+      <div class="ph-grid" id="phGrid"></div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast" hidden></div>
+
+  <script src="js/common.js"></script>
+  <script src="js/placeholders.js"></script>
+  <script src="js/lessons.js"></script>
+  <script src="js/progress.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

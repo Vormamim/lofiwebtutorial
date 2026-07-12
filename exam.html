@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>LoFiWeb Tutorial — practical examination</title>
+  <meta name="description" content="The HTML, CSS and JavaScript practical examination: eight questions, fifty minutes, forty marks." />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body class="lofi exam-page">
+  <header class="toolbar">
+    <a class="brand mini" href="index.html" title="Back to the landing page">
+      <span class="brand-kicker">Vormamim</span>
+      <strong>LoFiWeb Tutorial</strong>
+    </a>
+    <span class="exam-timer" id="timer">50:00</span>
+    <span class="spacer"></span>
+    <button class="button button-secondary" id="prevBtn" disabled>Previous</button>
+    <span class="exam-qcount" id="qCount">Question 1 of 8</span>
+    <button class="button button-secondary" id="nextBtn">Next</button>
+    <button class="button button-secondary" id="clearBtn" title="Empty the editors for a fresh question">Clear</button>
+    <button class="button button-secondary" id="saveQBtn" title="Download this question's page with its provenance record">Save question</button>
+    <button class="button button-primary" id="runBtn" title="Refresh the preview">Run</button>
+  </header>
+
+  <main class="workspace exam-workspace" id="workspace">
+    <section class="editors" id="editors">
+      <div class="editor-row" data-lang="html">
+        <div class="editor-head"><span class="dot pink"></span><span class="label">HTML</span></div>
+        <div class="editor-wrap">
+          <textarea id="ed-html" class="code-input" spellcheck="false" autocomplete="off" autocapitalize="off" wrap="soft"></textarea>
+        </div>
+      </div>
+      <div class="editor-row" data-lang="js">
+        <div class="editor-head"><span class="dot cyan"></span><span class="label">JS</span></div>
+        <div class="editor-wrap">
+          <textarea id="ed-js" class="code-input" spellcheck="false" autocomplete="off" autocapitalize="off" wrap="soft"></textarea>
+        </div>
+      </div>
+      <div class="editor-row" data-lang="css">
+        <div class="editor-head"><span class="dot violet"></span><span class="label">CSS</span></div>
+        <div class="editor-wrap">
+          <textarea id="ed-css" class="code-input" spellcheck="false" autocomplete="off" autocapitalize="off" wrap="soft"></textarea>
+        </div>
+      </div>
+    </section>
+
+    <div class="divider" id="divider" aria-hidden="true"></div>
+
+    <section class="vormweb">
+      <div class="exam-brief">
+        <h2 id="qTitle"></h2>
+        <p class="exam-skill" id="qSkill"></p>
+        <p id="qBrief"></p>
+        <div class="lm-checks">
+          <h3>Self-check (marks come from your teacher)</h3>
+          <ul id="qCheckList"></ul>
+          <button class="button button-secondary" id="checkBtn">Check this question</button>
+        </div>
+      </div>
+      <div class="vw-chrome">
+        <span class="vw-dot red"></span><span class="vw-dot amber"></span><span class="vw-dot green"></span>
+        <div class="vw-address"><span id="vwUrl">vormweb://exam</span></div>
+      </div>
+      <iframe id="preview" class="vw-screen" sandbox="allow-scripts allow-modals" title="Exam preview"></iframe>
+    </section>
+  </main>
+
+  <!-- start overlay -->
+  <div class="modal-backdrop" id="startModal">
+    <div class="modal">
+      <div class="modal-head">
+        <h2 id="examTitle">Practical Examination</h2>
+      </div>
+      <div id="examIntro"></div>
+      <p class="modal-sub">The fifty-minute timer starts when you press Begin. Your typing,
+      pasting and time are recorded with each question and included in your submission files.</p>
+      <button class="button button-primary" id="beginBtn">Begin the examination</button>
+      <a class="button button-secondary" href="ide.html" style="margin-left:0.5rem">Not yet - back to lessons</a>
+    </div>
+  </div>
+
+  <div class="toast" id="toast" hidden></div>
+
+  <script src="js/common.js"></script>
+  <script src="js/lessons.js"></script>
+  <script src="js/progress.js"></script>
+  <script src="js/exam.js"></script>
+</body>
+</html>
