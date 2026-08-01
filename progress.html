@@ -58,7 +58,12 @@
         banner.hidden = false;
         banner.innerHTML = "<strong>You are ready for the examination.</strong> " +
           "Fifty minutes, eight questions, everything you have practised. " +
-          "<a href='exam.html'>Begin when your teacher says so.</a>";
+          "<a href='exam.html'>Begin when your teacher says so.</a>" +
+          "<hr style='border-color:var(--cyan-line);margin:0.8rem 0;'>" +
+          "<strong>What's next?</strong> You already know variables, conditions, loops and functions — " +
+          "just in JavaScript. <a href='/crashcoursepython/'>CrashCoursePython</a> " +
+          "teaches the same ideas again in Python, the language the rest of the HSC Software Engineering " +
+          "course builds on.";
       } else {
         banner.hidden = false;
         banner.innerHTML = "The examination unlocks its best marks for finished students: " +

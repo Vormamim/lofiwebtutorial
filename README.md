@@ -1,12 +1,21 @@
 # LoFiWeb Tutorial
 
-A **self-paced web development course inside an IDE**, in a dark-academia
-dress. Part of the Vormamim NSW HSC Software Engineering family (alongside
-*LoFiWeb*, *LoFiGameLab* and the *SQL & Secure Software* course). Students aged
-14-15 work through **four courses of ten lessons each** — theory in plain
-English, one idea at a time — and finish with a **50-minute practical
-examination**. Everything runs in the browser with no accounts and no external
-requests, so it works offline, behind school firewalls, and on GitHub Pages.
+A **self-paced web development course inside an IDE**, in the Vormamim
+synthwave house style shared with the rest of the HSC Software Engineering
+suite. Students aged 14-15 (Stage 5) work through **four courses of ten
+lessons each** — theory in plain English, one idea at a time — and finish with
+a **50-minute practical examination**. Everything runs in the browser with no
+accounts and no external requests, so it works offline, behind school
+firewalls, and on GitHub Pages.
+
+**Where this sits in the pathway** (see `curriculum/HSC_Software_Engineering_Scope_and_Sequence.md`
+for the full picture): this is an optional Stage 5 on-ramp, not part of the
+Year 12 HSC suite itself — not every student arrives at Year 11 having done
+it. On completion, it points students to **CrashCoursePython** next (Python
+fundamentals via the same variables/conditions/loops ideas, just in the
+language the HSC suite is built on), which in turn feeds **LoFiPySQL** ->
+**LoFiFlask** / **HSC-Secure-Software-Architecture** -> the planned
+**lofiautomation**.
 
 ## Pages
 
