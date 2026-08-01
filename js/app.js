@@ -67,7 +67,7 @@
         ed.ta.selectionStart = ed.ta.selectionEnd = s + 2;
         updateGutter(ed); schedulePreview();
       }
-      if ((e.ctrlKey || e.metaKey) && e.key === "Enter") { e.preventDefault(); playScanline(); renderPreview(); }
+      if ((e.ctrlKey || e.metaKey) && e.key === "Enter") { e.preventDefault(); playScanline(); flashRunButton(); renderPreview(); }
     });
   }
 
@@ -128,6 +128,15 @@
     el.classList.remove("scanning");
     void el.offsetWidth; // force reflow so re-adding the class restarts the animation
     el.classList.add("scanning");
+  }
+
+  function flashRunButton() {
+    var el = $("runBtn");
+    el.classList.remove("run-flash");
+    void el.offsetWidth;
+    el.classList.add("run-flash");
+    clearTimeout(el._flashTimer);
+    el._flashTimer = setTimeout(function () { el.classList.remove("run-flash"); }, 700);
   }
 
   function renderPreview() {
@@ -459,7 +468,7 @@
   /* -------------------------------------------------------- wire up --- */
   function wire() {
     ["html", "js", "css"].forEach(wireEditor);
-    $("runBtn").addEventListener("click", function () { playScanline(); renderPreview(); });
+    $("runBtn").addEventListener("click", function () { playScanline(); flashRunButton(); renderPreview(); });
     $("reloadBtn").addEventListener("click", function () { playScanline(); renderPreview(); });
     $("saveBtn").addEventListener("click", saveFile);
     $("copyBtn").addEventListener("click", copyFile);

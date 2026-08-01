@@ -217,6 +217,15 @@ a { color: var(--accent); }
   color: #ffffff;
   box-shadow: 0 0 0 1px rgba(255, 79, 216, 0.22), 0 14px 30px rgba(255, 79, 216, 0.28);
 }
+.button-primary.run-flash { animation: run-flash 700ms ease; }
+@keyframes run-flash {
+  0%   { background: var(--ok); box-shadow: 0 0 0 1px rgba(107, 255, 176, 0.5), 0 0 22px rgba(107, 255, 176, 0.6); }
+  60%  { background: var(--ok); box-shadow: 0 0 0 1px rgba(107, 255, 176, 0.5), 0 0 22px rgba(107, 255, 176, 0.6); }
+  100% { background: linear-gradient(90deg, #ff4fd8, #8a5cff); box-shadow: 0 0 0 1px rgba(255, 79, 216, 0.22), 0 14px 30px rgba(255, 79, 216, 0.28); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .button-primary.run-flash { animation: none; }
+}
 .button-secondary {
   background: rgba(21, 22, 42, 0.70);
   color: var(--ink);
