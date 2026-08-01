@@ -25,6 +25,13 @@ window.LOFI = (function () {
     while (i < lines.length) {
       var line = lines[i];
       if (!line.trim()) { i++; continue; }
+      var heading = line.match(/^(#{1,4})\s+(.*)$/);
+      if (heading) {
+        var level = heading[1].length;
+        out.push("<h" + level + ">" + inline(heading[2]) + "</h" + level + ">");
+        i++;
+        continue;
+      }
       if (/^```/.test(line.trim())) {
         i++;
         var code = [];
