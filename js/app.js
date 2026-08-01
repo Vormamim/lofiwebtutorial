@@ -67,7 +67,7 @@
         ed.ta.selectionStart = ed.ta.selectionEnd = s + 2;
         updateGutter(ed); schedulePreview();
       }
-      if ((e.ctrlKey || e.metaKey) && e.key === "Enter") { e.preventDefault(); renderPreview(); }
+      if ((e.ctrlKey || e.metaKey) && e.key === "Enter") { e.preventDefault(); playScanline(); renderPreview(); }
     });
   }
 
@@ -123,6 +123,13 @@
     clearTimeout(previewTimer);
     previewTimer = setTimeout(renderPreview, 500);
   }
+  function playScanline() {
+    var el = $("vwScanline");
+    el.classList.remove("scanning");
+    void el.offsetWidth; // force reflow so re-adding the class restarts the animation
+    el.classList.add("scanning");
+  }
+
   function renderPreview() {
     clearTimeout(previewTimer);
     clearConsole();
@@ -383,6 +390,7 @@
     });
     if (TUT.allPass(results) && commit) {
       var rec = TUT.markComplete(les.id, currentCode(), les.sample);
+      launchConfetti();
       var note = "Lesson complete - well done.";
       if (rec.flags && rec.flags.length) {
         note += " A note about how this code was produced has been recorded for your teacher.";
@@ -425,11 +433,34 @@
     toastTimer = setTimeout(function () { el.hidden = true; }, 1800);
   }
 
+  /* ----------------------------------------------------- confetti ----- */
+  var CONFETTI_COLORS = ["#ff4fd8", "#00e5ff", "#8a5cff", "#6bffb0", "#ff8fe8"];
+  function launchConfetti() {
+    var count = 50;
+    for (var i = 0; i < count; i++) {
+      var piece = document.createElement("div");
+      piece.className = "confetti-piece";
+      var left = Math.random() * 100;
+      var duration = 1.6 + Math.random() * 1.2;
+      var delay = Math.random() * 0.35;
+      var spin = (Math.random() < 0.5 ? -1 : 1) * (360 + Math.random() * 720);
+      piece.style.left = left + "vw";
+      piece.style.background = CONFETTI_COLORS[i % CONFETTI_COLORS.length];
+      piece.style.animationDuration = duration + "s";
+      piece.style.animationDelay = delay + "s";
+      piece.style.setProperty("--spin", spin + "deg");
+      document.body.appendChild(piece);
+      (function (el, ms) {
+        setTimeout(function () { el.remove(); }, ms);
+      })(piece, (duration + delay) * 1000 + 100);
+    }
+  }
+
   /* -------------------------------------------------------- wire up --- */
   function wire() {
     ["html", "js", "css"].forEach(wireEditor);
-    $("runBtn").addEventListener("click", renderPreview);
-    $("reloadBtn").addEventListener("click", renderPreview);
+    $("runBtn").addEventListener("click", function () { playScanline(); renderPreview(); });
+    $("reloadBtn").addEventListener("click", function () { playScanline(); renderPreview(); });
     $("saveBtn").addEventListener("click", saveFile);
     $("copyBtn").addEventListener("click", copyFile);
     $("loadBtn").addEventListener("click", function () { $("fileInput").click(); });

@@ -70,7 +70,10 @@
         <div class="vw-address"><span id="vwUrl">vormweb://lesson</span></div>
         <button class="vw-reload" id="reloadBtn" title="Reload preview">Reload</button>
       </div>
-      <iframe id="preview" class="vw-screen" sandbox="allow-scripts allow-modals" title="VormWeb live preview"></iframe>
+      <div class="vw-screen-wrap" id="vwScreenWrap">
+        <iframe id="preview" class="vw-screen" sandbox="allow-scripts allow-modals" title="VormWeb live preview"></iframe>
+        <div class="vw-scanline" id="vwScanline" aria-hidden="true"></div>
+      </div>
       <div class="vw-console">
         <div class="vw-console-head">
           <span class="label">Console</span>
